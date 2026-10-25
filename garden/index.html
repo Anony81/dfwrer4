@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>A Little Rainy Afternoon 🩵</title>
+<meta name="description" content="A quiet garden made for Noura.">
+<meta name="theme-color" content="#7fb2d9">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='14' r='9' fill='%23a8cfe8'/%3E%3Cellipse cx='16' cy='27' rx='5' ry='3' fill='%237fb2d9'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:wght@300;400;500&family=Noto+Naskh+Arabic:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ambient layers (fixed, behind everything) -->
+<div class="sky" aria-hidden="true"></div>
+<div class="sunlight" aria-hidden="true"></div>
+<div class="clouds" aria-hidden="true">
+  <div class="cloud c1"></div><div class="cloud c2"></div><div class="cloud c3"></div><div class="cloud c4"></div>
+</div>
+<canvas id="rain" class="rain-canvas" aria-hidden="true"></canvas>
+
+<main id="stage">
+
+  <!-- ============ SCENE 1 · THE GATE ============ -->
+  <section id="scene-gate" class="scene scene-gate is-active" aria-label="The garden gate">
+    <div class="gate-art" aria-hidden="true">
+      <svg viewBox="0 0 1200 700" preserveAspectRatio="xMidYMax slice">
+        <defs>
+          <linearGradient id="gFar" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#bfe0f2"/><stop offset="1" stop-color="#9cc4e2"/>
+          </linearGradient>
+          <linearGradient id="gMid" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#7fa9c0"/><stop offset="1" stop-color="#5f8ba6"/>
+          </linearGradient>
+          <linearGradient id="gNear" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#4a6f7e"/><stop offset="1" stop-color="#31505f"/>
+          </linearGradient>
+        </defs>
+        <!-- distant misted tree line -->
+        <path fill="url(#gFar)" opacity=".7" d="M0 430 Q60 380 120 415 T240 405 Q300 360 360 408 T480 400 Q540 355 610 402 T740 396 Q810 350 880 400 T1020 394 Q1090 360 1140 402 L1200 396 V700 H0 Z"/>
+        <!-- mid foliage -->
+        <path fill="url(#gMid)" opacity=".85" d="M0 500 Q80 455 150 490 Q210 450 280 488 T420 482 Q490 440 560 486 T700 480 Q780 445 850 487 T990 481 Q1070 450 1130 489 L1200 483 V700 H0 Z"/>
+        <!-- near garden ground -->
+        <path fill="url(#gNear)" d="M0 570 Q200 535 400 560 T800 556 T1200 566 V700 H0 Z"/>
+        <!-- wet sheen on ground -->
+        <ellipse cx="600" cy="640" rx="520" ry="26" fill="#cfe6f4" opacity=".14"/>
+        <!-- gate posts + arch of greenery -->
+        <g stroke="#27404c" fill="none" stroke-linecap="round">
+          <path d="M330 585 V330 M330 330 Q600 218 870 330 M870 585 V330" stroke-width="7" opacity=".9"/>
+          <path d="M330 585 V330 M330 330 Q600 218 870 330 M870 585 V330" stroke="#5d8aa0" stroke-width="2" opacity=".5"/>
+        </g>
+        <!-- climbing vines on the arch -->
+        <g fill="#4f7d63" opacity=".92">
+          <path d="M330 340 q-16 -22 4 -34 q20 8 -4 34z"/><path d="M368 300 q-14 -24 8 -32 q17 11 -8 32z"/>
+          <path d="M430 272 q-12 -25 12 -30 q14 14 -12 30z"/><path d="M500 253 q-10 -26 15 -28 q12 16 -15 28z"/>
+          <path d="M575 243 q-8 -27 17 -26 q9 18 -17 26z"/><path d="M650 246 q-6 -27 19 -23 q6 19 -19 23z"/>
+          <path d="M722 258 q-4 -27 20 -20 q3 20 -20 20z"/><path d="M790 278 q-2 -27 21 -16 q-1 20 -21 16z"/>
+          <path d="M845 305 q1 -26 21 -11 q-4 19 -21 11z"/><path d="M872 345 q4 -24 21 -7 q-7 18 -21 7z"/>
+        </g>
+        <g fill="#a9d3ea" opacity=".85">
+          <circle cx="400" cy="284" r="5"/><circle cx="540" cy="248" r="4.5"/>
+          <circle cx="690" cy="250" r="5"/><circle cx="820" cy="290" r="4.5"/>
+        </g>
+        <!-- hanging blossoms -->
+        <g stroke="#3f6a52" stroke-width="2" fill="none"><path d="M470 262 v34"/><path d="M610 240 v40"/><path d="M745 262 v30"/></g>
+        <g fill="#dcecf6"><circle cx="470" cy="300" r="6"/><circle cx="610" cy="284" r="7"/><circle cx="745" cy="296" r="6"/></g>
+        <g fill="#8fc0e2"><circle cx="470" cy="300" r="2.4"/><circle cx="610" cy="284" r="2.8"/><circle cx="745" cy="296" r="2.4"/></g>
+        <!-- soft foreground leaves, corners -->
+        <path fill="#22394a" opacity=".9" d="M-40 700 Q40 560 150 620 Q90 660 120 700 Z"/>
+        <path fill="#22394a" opacity=".9" d="M1240 700 Q1160 560 1050 620 Q1110 660 1080 700 Z"/>
+        <path fill="#2c4a5c" opacity=".8" d="M-60 640 Q60 590 130 660 Q40 690 -60 700Z"/>
+        <path fill="#2c4a5c" opacity=".8" d="M1260 640 Q1140 590 1070 660 Q1160 690 1260 700Z"/>
+      </svg>
+    </div>
+
+    <div class="gate-copy">
+      <p class="overline">for Noura · a rainy afternoon</p>
+      <h1 class="gate-line">Hey, Noura.<br>I made a little place for you.&nbsp;<span class="heart" aria-hidden="true">🩵</span></h1>
+      <p class="gate-sub">It&rsquo;s quiet here. It&rsquo;s raining a little. There are things I&rsquo;d like to say, slowly.</p>
+      <button id="btn-enter" class="btn-gate" type="button">
+        <span>Walk in with me</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v14M6 13l6 6 6-6"/></svg>
+      </button>
+    </div>
+  </section>
+
+  <!-- ============ SCENE 2 · THE PATH ============ -->
+  <section id="scene-path" class="scene scene-path" aria-label="A quiet walk through the garden" hidden>
+    <div class="path-art" aria-hidden="true">
+      <svg viewBox="0 0 1200 700" preserveAspectRatio="xMidYMax slice">
+        <defs>
+          <linearGradient id="pSky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#c9e3f2"/><stop offset="1" stop-color="#a5cbe4"/>
+          </linearGradient>
+          <linearGradient id="pGround" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#54798a"/><stop offset="1" stop-color="#2e4c5b"/>
+          </linearGradient>
+          <radialGradient id="pPool" cx=".5" cy=".5" r=".5">
+            <stop offset="0" stop-color="#bfe0f2" stop-opacity=".9"/><stop offset="1" stop-color="#7fb2d9" stop-opacity=".25"/>
+          </radialGradient>
+        </defs>
+        <rect width="1200" height="700" fill="url(#pSky)"/>
+        <!-- far trees -->
+        <g fill="#8db6cb" opacity=".75">
+          <ellipse cx="120" cy="330" rx="130" ry="95"/><ellipse cx="330" cy="300" rx="110" ry="80"/>
+          <ellipse cx="880" cy="310" rx="120" ry="85"/><ellipse cx="1100" cy="335" rx="130" ry="95"/>
+        </g>
+        <g fill="#6d99af" opacity=".9">
+          <ellipse cx="220" cy="390" rx="150" ry="90"/><ellipse cx="980" cy="395" rx="150" ry="90"/>
+        </g>
+        <!-- trunks -->
+        <g fill="#3c5c6b"><path d="M205 480 q10 -70 4 -130 l14 0 q-4 62 6 130z"/><path d="M985 480 q-10 -70 -4 -130 l-14 0 q4 62 -6 130z"/></g>
+        <!-- canopy over path -->
+        <g fill="#4f7d63" opacity=".95"><ellipse cx="150" cy="120" rx="220" ry="110"/><ellipse cx="1060" cy="130" rx="220" ry="110"/></g>
+        <g fill="#5e8b6f" opacity=".8"><ellipse cx="260" cy="70" rx="180" ry="80"/><ellipse cx="950" cy="60" rx="180" ry="80"/></g>
+        <!-- light shaft -->
+        <path d="M470 0 L730 0 L860 700 L340 700 Z" fill="#f6e8c8" opacity=".10"/>
+        <!-- ground -->
+        <path fill="url(#pGround)" d="M0 470 Q300 440 600 462 T1200 458 V700 H0 Z"/>
+        <!-- stone path receding -->
+        <g fill="#7e9dab" opacity=".9">
+          <ellipse cx="600" cy="482" rx="34" ry="7"/><ellipse cx="585" cy="502" rx="42" ry="9"/>
+          <ellipse cx="612" cy="528" rx="54" ry="11"/><ellipse cx="588" cy="562" rx="70" ry="14"/>
+          <ellipse cx="620" cy="608" rx="92" ry="18"/><ellipse cx="585" cy="664" rx="120" ry="23"/>
+        </g>
+        <g fill="#a9c6d2" opacity=".5">
+          <ellipse cx="600" cy="480" rx="26" ry="4"/><ellipse cx="585" cy="500" rx="32" ry="5"/>
+          <ellipse cx="612" cy="525" rx="42" ry="6.5"/><ellipse cx="588" cy="558" rx="54" ry="8"/>
+          <ellipse cx="620" cy="602" rx="70" ry="10"/><ellipse cx="585" cy="656" rx="94" ry="13"/>
+        </g>
+        <!-- reflecting pool -->
+        <ellipse id="pool-base" cx="880" cy="600" rx="150" ry="42" fill="url(#pPool)"/>
+        <ellipse cx="880" cy="600" rx="150" ry="42" fill="none" stroke="#cfe6f4" stroke-opacity=".5" stroke-width="1.5"/>
+        <!-- grass tufts -->
+        <g stroke="#41685a" stroke-width="3" fill="none" stroke-linecap="round" opacity=".9">
+          <path d="M300 620 q-6 -22 -2 -34 M310 622 q2 -24 10 -36 M322 624 q8 -20 18 -28"/>
+          <path d="M760 560 q-5 -18 -1 -28 M770 562 q3 -19 9 -28"/>
+          <path d="M180 540 q-4 -16 0 -26 M190 542 q4 -16 10 -24"/>
+        </g>
+      </svg>
+    </div>
+
+    <!-- interactive flowers (JS-managed) -->
+    <div id="flowers" class="flowers" aria-label="Flowers you can touch"></div>
+
+    <!-- ripple interaction layer over the pool -->
+    <button id="pool-hit" class="pool-hit" type="button" aria-label="Tap the water and watch ripples"></button>
+    <canvas id="ripples" class="ripples-canvas" aria-hidden="true"></canvas>
+
+    <div class="path-hint" id="path-hint">
+      <p>Take your time. Touch the flowers, tap the little pool&hellip;</p>
+      <p class="hint-sub">There&rsquo;s something I want to tell you further down the path.</p>
+    </div>
+
+    <button id="btn-letter" class="btn-gate btn-letter" type="button" hidden>
+      <span>Read what I came to say</span>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v14M6 13l6 6 6-6"/></svg>
+    </button>
+  </section>
+
+  <!-- ============ SCENE 3 · THE LETTER ============ -->
+  <section id="scene-letter" class="scene scene-letter" aria-label="The message" hidden>
+    <article class="letter-panel" dir="rtl" lang="ar">
+      <p class="letter-overline">رسالة صغيرة</p>
+      <p class="ar-body">نوره، حبيت أوضحلج شي.</p>
+      <p class="ar-body">اليوم من طلعتي من المدرسة، جان ببالي أسألج عن يومج وأحچي وياج، بس طلعت من البيت وما جان عندي إنترنت، وما كدرت أراسِلج لحد ما رجعت.</p>
+      <p class="ar-body">ما أريدج تفكرين إنج مو ببالي، لأن حتى بالطريق جنت اسمع فويساتج، وجنت أعيدهن لأن مشتاقلج وأحب أسمع صوتج.</p>
+      <p class="ar-body">آسف إذا خليتج تحسين إني ما اهتميت أو ما سألت عنج. ما جان قصدي أبد. <span class="heart" aria-hidden="true">🩵</span></p>
+      <p class="letter-sign">— مني</p>
+    </article>
+    <button id="btn-onward" class="btn-soft" type="button">Stay in the garden a while</button>
+  </section>
+
+  <!-- ============ SCENE 4 · THE CLEARING ============ -->
+  <section id="scene-clearing" class="scene scene-clearing" aria-label="A gentle ending" hidden>
+    <div class="clearing-art" aria-hidden="true">
+      <svg viewBox="0 0 1200 700" preserveAspectRatio="xMidYMax meet">
+        <defs>
+          <radialGradient id="glow" cx=".5" cy=".42" r=".55">
+            <stop offset="0" stop-color="#ffe9bd" stop-opacity=".55"/>
+            <stop offset=".55" stop-color="#ffd9a0" stop-opacity=".18"/>
+            <stop offset="1" stop-color="#ffd9a0" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="still" cx=".5" cy=".5" r=".5">
+            <stop offset="0" stop-color="#e8d9b8" stop-opacity=".85"/>
+            <stop offset="1" stop-color="#9cc4e2" stop-opacity=".3"/>
+          </radialGradient>
+        </defs>
+        <rect width="1200" height="700" fill="url(#glow)"/>
+        <!-- soft horizon -->
+        <path fill="#5f8ba6" opacity=".5" d="M0 470 Q300 440 600 458 T1200 452 V700 H0 Z"/>
+        <!-- still water -->
+        <ellipse cx="600" cy="560" rx="300" ry="60" fill="url(#still)"/>
+        <ellipse cx="600" cy="560" rx="300" ry="60" fill="none" stroke="#f2e3c2" stroke-opacity=".45" stroke-width="1.5"/>
+        <!-- single flower, the focus -->
+        <g id="final-flower" transform="translate(600 470)">
+          <path d="M0 90 C -4 40 4 20 0 -10" stroke="#4f7d63" stroke-width="5" fill="none" stroke-linecap="round"/>
+          <path d="M0 60 q-30 -8 -40 -30 q28 -4 40 30z" fill="#557f66"/>
+          <path d="M0 44 q28 -10 36 -32 q-26 -2 -36 32z" fill="#4c745d"/>
+          <g fill="#dff0fa" stroke="#a9cde6" stroke-width="1.5">
+            <ellipse cx="0" cy="-34" rx="13" ry="22"/>
+            <ellipse cx="21" cy="-18" rx="13" ry="22" transform="rotate(72 21 -18)"/>
+            <ellipse cx="14" cy="8" rx="13" ry="22" transform="rotate(144 14 8)"/>
+            <ellipse cx="-14" cy="8" rx="13" ry="22" transform="rotate(-144 -14 8)"/>
+            <ellipse cx="-21" cy="-18" rx="13" ry="22" transform="rotate(-72 -21 -18)"/>
+          </g>
+          <circle cx="0" cy="-12" r="9" fill="#f4e3b6"/>
+          <circle cx="0" cy="-12" r="4" fill="#e6c98a"/>
+        </g>
+        <!-- droplet falling from petal -->
+        <g class="drop-cycle"><path d="M560 420 q-5 8 0 13 q5 -5 0 -13z" fill="#bcdcf0"/></g>
+      </svg>
+    </div>
+    <div class="clearing-copy">
+      <p class="final-line">I couldn&rsquo;t message you on the way home,<br>but you were still on my mind.&nbsp;<span class="heart" aria-hidden="true">🩵</span></p>
+      <p class="final-sub">No need to answer anything. The garden stays open.</p>
+      <div class="final-actions">
+        <button id="btn-revisit" class="btn-soft" type="button">Wander again</button>
+        <button id="btn-rest" class="btn-quiet" type="button">Just sit here</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script src="js/rain.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
